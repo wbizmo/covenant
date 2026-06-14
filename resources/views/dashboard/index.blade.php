@@ -6,26 +6,184 @@
     Dashboard
 </h1>
 
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+<div
+    style="
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:20px;
+        margin-bottom:24px;
+    "
+>
 
     <div class="card">
-        <small>Total Contracts</small>
-        <h2>{{ $totalContracts }}</h2>
+        <div style="color:#6b7280;margin-bottom:8px;">
+            Total Contracts
+        </div>
+
+        <div style="font-size:32px;font-weight:700;">
+            {{ $totalContracts }}
+        </div>
     </div>
 
     <div class="card">
-        <small>Active</small>
-        <h2>{{ $activeContracts }}</h2>
+        <div style="color:#6b7280;margin-bottom:8px;">
+            Active
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#166534;">
+            {{ $activeContracts }}
+        </div>
     </div>
 
     <div class="card">
-        <small>Expiring</small>
-        <h2>{{ $expiringContracts }}</h2>
+        <div style="color:#6b7280;margin-bottom:8px;">
+            Expiring
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#92400e;">
+            {{ $expiringContracts }}
+        </div>
     </div>
 
     <div class="card">
-        <small>Expired</small>
-        <h2>{{ $expiredContracts }}</h2>
+        <div style="color:#6b7280;margin-bottom:8px;">
+            Expired
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#991b1b;">
+            {{ $expiredContracts }}
+        </div>
+    </div>
+
+</div>
+
+<div
+    style="
+        display:grid;
+        grid-template-columns:2fr 1fr;
+        gap:24px;
+    "
+>
+
+    <div class="card">
+
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:20px;
+            "
+        >
+            <h3>
+                Recent Contracts
+            </h3>
+
+            <a href="{{ route('contracts.index') }}">
+                View All
+            </a>
+        </div>
+
+        @forelse($recentContracts as $contract)
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    padding:14px 0;
+                    border-bottom:1px solid #f1f5f9;
+                "
+            >
+
+                <div>
+
+                    <a
+                        href="{{ route('contracts.show', $contract) }}"
+                        style="
+                            font-weight:600;
+                            color:#111827;
+                        "
+                    >
+                        {{ $contract->title }}
+                    </a>
+
+                    <div
+                        style="
+                            font-size:13px;
+                            color:#6b7280;
+                            margin-top:4px;
+                        "
+                    >
+                        {{ $contract->counterparty }}
+                    </div>
+
+                </div>
+
+                <div
+                    style="
+                        font-size:13px;
+                        color:#6b7280;
+                    "
+                >
+                    {{ $contract->created_at->diffForHumans() }}
+                </div>
+
+            </div>
+
+        @empty
+
+            <p style="color:#6b7280;">
+                No contracts yet.
+            </p>
+
+        @endforelse
+
+    </div>
+
+    <div class="card">
+
+        <h3 style="margin-bottom:20px;">
+            Upcoming Renewals
+        </h3>
+
+        @forelse($upcomingRenewals as $contract)
+
+            <div
+                style="
+                    padding-bottom:16px;
+                    margin-bottom:16px;
+                    border-bottom:1px solid #f1f5f9;
+                "
+            >
+
+                <div
+                    style="
+                        font-weight:600;
+                        margin-bottom:4px;
+                    "
+                >
+                    {{ $contract->title }}
+                </div>
+
+                <div
+                    style="
+                        font-size:13px;
+                        color:#6b7280;
+                    "
+                >
+                    {{ optional($contract->renewal_date)->format('M d, Y') }}
+                </div>
+
+            </div>
+
+        @empty
+
+            <p style="color:#6b7280;">
+                No upcoming renewals.
+            </p>
+
+        @endforelse
+
     </div>
 
 </div>
