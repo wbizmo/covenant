@@ -115,6 +115,51 @@
             font-weight:700;
             margin-bottom:24px;
         }
+
+        .toast{
+            position:fixed;
+            top:24px;
+            right:24px;
+            width:360px;
+            z-index:99999;
+            border-radius:16px;
+            padding:16px;
+            box-shadow:0 15px 35px rgba(0,0,0,.15);
+        }
+
+        .toast-success{
+            background:#111827;
+            color:#fff;
+        }
+
+        .toast-error{
+            background:#dc2626;
+            color:#fff;
+        }
+
+        .toast-header{
+            font-size:14px;
+            font-weight:600;
+            margin-bottom:4px;
+        }
+
+        .toast-body{
+            font-size:14px;
+            line-height:1.5;
+        }
+
+        .toast-row{
+            display:flex;
+            gap:12px;
+            align-items:flex-start;
+        }
+
+        .toast-close{
+            border:none;
+            background:none;
+            color:white;
+            cursor:pointer;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +218,84 @@
         </div>
 
         <div class="content">
+
+            @if(session('success'))
+
+            <div
+                x-data="{ show:true }"
+                x-show="show"
+                x-init="setTimeout(() => show = false, 4000)"
+                x-transition
+                class="toast toast-success"
+            >
+                <div class="toast-row">
+
+                    <span class="material-symbols-rounded" style="color:#22c55e;">
+                        check_circle
+                    </span>
+
+                    <div style="flex:1;">
+                        <div class="toast-header">
+                            Success
+                        </div>
+
+                        <div class="toast-body">
+                            {{ session('success') }}
+                        </div>
+                    </div>
+
+                    <button
+                        @click="show = false"
+                        class="toast-close"
+                    >
+                        <span class="material-symbols-rounded">
+                            close
+                        </span>
+                    </button>
+
+                </div>
+            </div>
+
+            @endif
+
+            @if($errors->any())
+
+            <div
+                x-data="{ show:true }"
+                x-show="show"
+                x-init="setTimeout(() => show = false, 5000)"
+                x-transition
+                class="toast toast-error"
+            >
+                <div class="toast-row">
+
+                    <span class="material-symbols-rounded">
+                        error
+                    </span>
+
+                    <div style="flex:1;">
+                        <div class="toast-header">
+                            Validation Error
+                        </div>
+
+                        <div class="toast-body">
+                            Please fix the highlighted fields and try again.
+                        </div>
+                    </div>
+
+                    <button
+                        @click="show = false"
+                        class="toast-close"
+                    >
+                        <span class="material-symbols-rounded">
+                            close
+                        </span>
+                    </button>
+
+                </div>
+            </div>
+
+            @endif
 
             @yield('content')
 
