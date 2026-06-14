@@ -10,7 +10,7 @@
         </h1>
 
         <p style="color:#6b7280;">
-            Manage agreements and renewals
+            Manage agreements, renewals and contract documents
         </p>
     </div>
 
@@ -20,6 +20,96 @@
     >
         New Contract
     </a>
+
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+
+    <form
+        method="GET"
+        action="{{ route('contracts.index') }}"
+        style="
+            display:grid;
+            grid-template-columns:2fr 1fr auto auto;
+            gap:14px;
+            align-items:end;
+        "
+    >
+
+        <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;">
+                Search
+            </label>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search title, counterparty or description"
+                style="
+                    width:100%;
+                    margin-top:8px;
+                    padding:12px 14px;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                "
+            >
+        </div>
+
+        <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;">
+                Category
+            </label>
+
+            <select
+                name="category_id"
+                style="
+                    width:100%;
+                    margin-top:8px;
+                    padding:12px 14px;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                    background:#ffffff;
+                "
+            >
+                <option value="">
+                    All Categories
+                </option>
+
+                @foreach($categories as $category)
+
+                    <option
+                        value="{{ $category->id }}"
+                        @selected(request('category_id') == $category->id)
+                    >
+                        {{ $category->name }}
+                    </option>
+
+                @endforeach
+
+            </select>
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Filter
+        </button>
+
+        <a
+            href="{{ route('contracts.index') }}"
+            class="btn"
+            style="
+                background:#f3f4f6;
+                color:#111827;
+                text-align:center;
+            "
+        >
+            Reset
+        </a>
+
+    </form>
 
 </div>
 
@@ -192,7 +282,7 @@
             margin-bottom:16px;
         "
     >
-        description
+        search_off
     </span>
 
     <h2
@@ -201,7 +291,7 @@
             margin-bottom:10px;
         "
     >
-        No contracts yet
+        No contracts found
     </h2>
 
     <p
@@ -210,14 +300,14 @@
             margin-bottom:24px;
         "
     >
-        Create your first contract to get started.
+        Try changing your search or filter options.
     </p>
 
     <a
-        href="{{ route('contracts.create') }}"
+        href="{{ route('contracts.index') }}"
         class="btn btn-primary"
     >
-        Create Contract
+        Reset Filters
     </a>
 
 </div>

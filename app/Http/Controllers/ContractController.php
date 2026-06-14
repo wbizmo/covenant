@@ -4,18 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Contract;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreContractRequest;
 
 class ContractController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contracts = Contract::with('category')
-            ->latest()
-            ->paginate(10);
+        $categories = Category::orderBy('name')->get();
 
-        return view('contracts.index', compact('contracts'));
+        $contracts = Contract::with('category')
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->search;
+
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('counterparty', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->filled('category_id'), function ($query) use ($request) {
+                $query->where('category_id', $request->category_id);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('contracts.index', compact(
+            'contracts',
+            'categories'
+        ));
     }
 
     public function create()
