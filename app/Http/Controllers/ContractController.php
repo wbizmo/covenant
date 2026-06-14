@@ -27,6 +27,27 @@ class ContractController extends Controller
             ->when($request->filled('category_id'), function ($query) use ($request) {
                 $query->where('category_id', $request->category_id);
             })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $today = now();
+
+                if ($request->status === 'expired') {
+                    $query->whereDate('end_date', '<', $today);
+                }
+
+                if ($request->status === 'expiring') {
+                    $query
+                        ->whereDate('end_date', '>=', $today)
+                        ->whereDate('end_date', '<=', $today->copy()->addDays(30));
+                }
+
+                if ($request->status === 'active') {
+                    $query->where(function ($query) use ($today) {
+                        $query
+                            ->whereNull('end_date')
+                            ->orWhereDate('end_date', '>', $today->copy()->addDays(30));
+                    });
+                }
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -88,20 +109,16 @@ class ContractController extends Controller
         ));
     }
 
-    public function update(
-        StoreContractRequest $request,
-        Contract $contract
-    ) {
+    public function update(StoreContractRequest $request, Contract $contract)
+    {
         $documentPath = $contract->document_path;
 
         if ($request->hasFile('document')) {
-
             if (
                 $contract->document_path &&
                 Storage::disk('public')->exists($contract->document_path)
             ) {
-                Storage::disk('public')
-                    ->delete($contract->document_path);
+                Storage::disk('public')->delete($contract->document_path);
             }
 
             $documentPath = $request
@@ -132,8 +149,7 @@ class ContractController extends Controller
             $contract->document_path &&
             Storage::disk('public')->exists($contract->document_path)
         ) {
-            Storage::disk('public')
-                ->delete($contract->document_path);
+            Storage::disk('public')->delete($contract->document_path);
         }
 
         $contract->delete();

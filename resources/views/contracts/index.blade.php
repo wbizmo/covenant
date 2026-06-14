@@ -30,7 +30,7 @@
         action="{{ route('contracts.index') }}"
         style="
             display:grid;
-            grid-template-columns:2fr 1fr auto auto;
+            grid-template-columns:2fr 1fr 1fr auto auto;
             gap:14px;
             align-items:end;
         "
@@ -87,6 +87,49 @@
 
                 @endforeach
 
+            </select>
+        </div>
+
+        <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;">
+                Status
+            </label>
+
+            <select
+                name="status"
+                style="
+                    width:100%;
+                    margin-top:8px;
+                    padding:12px 14px;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                    background:#ffffff;
+                "
+            >
+                <option value="">
+                    All Statuses
+                </option>
+
+                <option
+                    value="active"
+                    @selected(request('status') === 'active')
+                >
+                    Active
+                </option>
+
+                <option
+                    value="expiring"
+                    @selected(request('status') === 'expiring')
+                >
+                    Expiring
+                </option>
+
+                <option
+                    value="expired"
+                    @selected(request('status') === 'expired')
+                >
+                    Expired
+                </option>
             </select>
         </div>
 
@@ -170,7 +213,7 @@
                     </a>
 
                     <div style="font-size:13px;color:#6b7280;">
-                        Created {{ $contract->created_at->diffForHumans() }}
+                        {{ $contract->counterparty }}
                     </div>
 
                 </td>
