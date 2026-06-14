@@ -1,39 +1,107 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
+
+    <div style="margin-bottom:28px;">
+
+        <h1 style="
+            font-size:28px;
+            font-weight:700;
+            margin-bottom:8px;
+        ">
+            Choose New Password
+        </h1>
+
+        <p style="
+            color:#6b7280;
+            line-height:1.6;
+        ">
+            Create a new password for your Covenant account.
+        </p>
+
+    </div>
+
+    <form
+        method="POST"
+        action="{{ route('password.store') }}"
+        x-data="{ loading:false }"
+        @submit="loading=true"
+    >
+
         @csrf
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+        <input
+            type="hidden"
+            name="token"
+            value="{{ $request->route('token') }}"
+        >
 
-        <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
+            <x-input-label
+                for="email"
+                value="Email Address"
+            />
+
+            <x-text-input
+                id="email"
+                type="email"
+                name="email"
+                :value="old('email', $request->email)"
+                required
+            />
+
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div style="margin-top:20px;">
+
+            <x-input-label
+                for="password"
+                value="Password"
+            />
+
+            <x-text-input
+                id="password"
+                type="password"
+                name="password"
+                required
+            />
+
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        <div style="margin-top:20px;">
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+            <x-input-label
+                for="password_confirmation"
+                value="Confirm Password"
+            />
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            <x-text-input
+                id="password_confirmation"
+                type="password"
+                name="password_confirmation"
+                required
+            />
+
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
+        <div style="margin-top:24px;">
+
+            <x-primary-button
+                style="width:100%;"
+                :disabled="loading"
+            >
+
+                <span x-show="!loading">
+                    Reset Password
+                </span>
+
+                <span x-show="loading">
+                    Resetting...
+                </span>
+
             </x-primary-button>
+
         </div>
+
     </form>
+
 </x-guest-layout>

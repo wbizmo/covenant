@@ -1,27 +1,74 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+
+    <div style="margin-bottom:28px;">
+
+        <h1 style="
+            font-size:28px;
+            font-weight:700;
+            margin-bottom:8px;
+        ">
+            Confirm Password
+        </h1>
+
+        <p style="
+            color:#6b7280;
+            line-height:1.6;
+        ">
+            Please confirm your password before continuing.
+        </p>
+
     </div>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
+    <form
+        method="POST"
+        action="{{ route('password.confirm') }}"
+        x-data="{ loading:false }"
+        @submit="loading=true"
+    >
+
         @csrf
 
-        <!-- Password -->
         <div>
-            <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <x-input-label
+                for="password"
+                value="Password"
+            />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-text-input
+                id="password"
+                type="password"
+                name="password"
+                required
+                autocomplete="current-password"
+            />
+
+            <x-input-error
+                :messages="$errors->get('password')"
+                class="mt-2"
+            />
+
         </div>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
+        <div style="margin-top:24px;">
+
+            <x-primary-button
+                style="width:100%;"
+                :disabled="loading"
+            >
+
+                <span x-show="!loading">
+                    Confirm Password
+                </span>
+
+                <span x-show="loading">
+                    Confirming...
+                </span>
+
             </x-primary-button>
+
         </div>
+
     </form>
+
 </x-guest-layout>
