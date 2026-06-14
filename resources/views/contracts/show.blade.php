@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
 
     <div>
 
@@ -36,7 +36,7 @@
                 Expired
             </span>
 
-        @else
+        @elseif($contract->status === 'expiring')
 
             <span style="
                 background:#fef3c7;
@@ -47,6 +47,19 @@
                 font-weight:600;
             ">
                 Expiring
+            </span>
+
+        @else
+
+            <span style="
+                background:#e5e7eb;
+                color:#374151;
+                padding:8px 12px;
+                border-radius:999px;
+                font-size:12px;
+                font-weight:600;
+            ">
+                Draft
             </span>
 
         @endif
@@ -63,6 +76,27 @@
             Edit
         </a>
 
+        <form
+            method="POST"
+            action="{{ route('contracts.destroy', $contract) }}"
+            onsubmit="return confirm('Delete this contract?')"
+        >
+            @csrf
+            @method('DELETE')
+
+            <button
+                type="submit"
+                class="btn"
+                style="
+                    background:#dc2626;
+                    color:white;
+                "
+            >
+                Delete
+            </button>
+
+        </form>
+
     </div>
 
 </div>
@@ -75,13 +109,22 @@
             Contract Details
         </h3>
 
-        <p><strong>Counterparty:</strong> {{ $contract->counterparty }}</p>
+        <p>
+            <strong>Counterparty:</strong>
+            {{ $contract->counterparty }}
+        </p>
+
         <br>
 
-        <p><strong>Category:</strong> {{ $contract->category?->name ?? '-' }}</p>
+        <p>
+            <strong>Category:</strong>
+            {{ $contract->category?->name ?? '-' }}
+        </p>
+
         <br>
 
-        <p><strong>Value:</strong>
+        <p>
+            <strong>Value:</strong>
             {{ $contract->value ? '$'.number_format($contract->value,2) : '-' }}
         </p>
 
@@ -137,7 +180,7 @@
 <div class="card" style="margin-top:24px;">
 
     <h3 style="margin-bottom:16px;">
-        Document
+        Attached Document
     </h3>
 
     <a
