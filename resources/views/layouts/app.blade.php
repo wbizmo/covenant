@@ -74,7 +74,25 @@
             padding:16px;
         }
 
-        .nav a{
+        .nav-section{
+            font-size:11px;
+            font-weight:700;
+            letter-spacing:.08em;
+            color:#9ca3af;
+            padding:18px 14px 8px;
+            text-transform:uppercase;
+        }
+
+        .nav-section:first-child{
+            padding-top:8px;
+        }
+
+        .nav a,
+        .nav button{
+            width:100%;
+            border:none;
+            background:none;
+            cursor:pointer;
             display:flex;
             align-items:center;
             gap:12px;
@@ -84,9 +102,11 @@
             color:#4b5563;
             font-size:14px;
             font-weight:500;
+            text-align:left;
         }
 
-        .nav a:hover{
+        .nav a:hover,
+        .nav button:hover{
             background:#f3f4f6;
         }
 
@@ -183,6 +203,10 @@
 
         <nav class="nav">
 
+            <div class="nav-section">
+                Overview
+            </div>
+
             <a
                 href="{{ route('dashboard') }}"
                 class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"
@@ -190,6 +214,10 @@
                 <span class="material-symbols-rounded">dashboard</span>
                 Dashboard
             </a>
+
+            <div class="nav-section">
+                Contract Management
+            </div>
 
             <a
                 href="{{ route('contracts.index') }}"
@@ -215,6 +243,10 @@
                 Categories
             </a>
 
+            <div class="nav-section">
+                Account
+            </div>
+
             <a
                 href="{{ route('profile.edit') }}"
                 class="{{ request()->routeIs('profile.*') ? 'active' : '' }}"
@@ -222,6 +254,18 @@
                 <span class="material-symbols-rounded">settings</span>
                 Settings
             </a>
+
+            <form
+                method="POST"
+                action="{{ route('logout') }}"
+            >
+                @csrf
+
+                <button type="submit">
+                    <span class="material-symbols-rounded">logout</span>
+                    Logout
+                </button>
+            </form>
 
         </nav>
 
