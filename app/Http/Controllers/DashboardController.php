@@ -2,37 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Contract;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalContracts = Contract::count();
+        $contracts = Contract::all();
 
-        $activeContracts = Contract::where(
-            'status',
-            'active'
-        )->count();
+        $totalContracts = $contracts->count();
 
-        $expiredContracts = Contract::where(
-            'status',
-            'expired'
-        )->count();
+        $activeContracts = $contracts
+            ->filter(fn ($c) => $c->calculated_status === 'active')
+            ->count();
 
-        $expiringContracts = Contract::where(
-            'status',
-            'expiring'
-        )->count();
+        $expiringContracts = $contracts
+            ->filter(fn ($c) => $c->calculated_status === 'expiring')
+            ->count();
+
+        $expiredContracts = $contracts
+            ->filter(fn ($c) => $c->calculated_status === 'expired')
+            ->count();
 
         $recentContracts = Contract::latest()
             ->take(5)
             ->get();
 
-        $upcomingRenewals = Contract::whereNotNull(
-                'renewal_date'
-            )
+        $upcomingRenewals = Contract::whereNotNull('renewal_date')
             ->orderBy('renewal_date')
             ->take(5)
             ->get();
@@ -40,8 +36,8 @@ class DashboardController extends Controller
         return view('dashboard.index', compact(
             'totalContracts',
             'activeContracts',
-            'expiredContracts',
             'expiringContracts',
+            'expiredContracts',
             'recentContracts',
             'upcomingRenewals'
         ));

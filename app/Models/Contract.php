@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -35,5 +36,27 @@ class Contract extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function getCalculatedStatusAttribute(): string
+    {
+        if (!$this->end_date) {
+            return 'active';
+        }
+
+        if ($this->end_date->isPast()) {
+            return 'expired';
+        }
+
+        if (
+            now()->diffInDays(
+                $this->end_date,
+                false
+            ) <= 30
+        ) {
+            return 'expiring';
+        }
+
+        return 'active';
     }
 }

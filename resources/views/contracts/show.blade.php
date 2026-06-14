@@ -10,7 +10,7 @@
             {{ $contract->title }}
         </h1>
 
-        @if($contract->status === 'active')
+        @if($contract->calculated_status === 'active')
 
             <span style="
                 background:#dcfce7;
@@ -23,7 +23,7 @@
                 Active
             </span>
 
-        @elseif($contract->status === 'expired')
+        @elseif($contract->calculated_status === 'expired')
 
             <span style="
                 background:#fee2e2;
@@ -36,7 +36,7 @@
                 Expired
             </span>
 
-        @elseif($contract->status === 'expiring')
+        @elseif($contract->calculated_status === 'expiring')
 
             <span style="
                 background:#fef3c7;
