@@ -14,7 +14,6 @@
         margin-bottom:24px;
     "
 >
-
     <div class="card">
         <div style="color:#6b7280;margin-bottom:8px;">
             Total Contracts
@@ -54,7 +53,6 @@
             {{ $expiredContracts }}
         </div>
     </div>
-
 </div>
 
 <div
@@ -64,7 +62,6 @@
         gap:24px;
     "
 >
-
     <div class="card">
 
         <div
@@ -94,9 +91,7 @@
                     border-bottom:1px solid #f1f5f9;
                 "
             >
-
                 <div>
-
                     <a
                         href="{{ route('contracts.show', $contract) }}"
                         style="
@@ -116,7 +111,6 @@
                     >
                         {{ $contract->counterparty }}
                     </div>
-
                 </div>
 
                 <div
@@ -127,7 +121,6 @@
                 >
                     {{ $contract->created_at->diffForHumans() }}
                 </div>
-
             </div>
 
         @empty
@@ -143,6 +136,96 @@
     <div class="card">
 
         <h3 style="margin-bottom:20px;">
+            Contract Health
+        </h3>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+            <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-size:14px;color:#374151;">
+                        Active
+                    </span>
+
+                    <strong>
+                        {{ $activeContracts }}
+                    </strong>
+                </div>
+
+                <div style="height:10px;background:#f3f4f6;border-radius:999px;overflow:hidden;">
+                    <div
+                        style="
+                            height:100%;
+                            width:{{ $totalContracts ? ($activeContracts / $totalContracts) * 100 : 0 }}%;
+                            background:#22c55e;
+                            border-radius:999px;
+                        "
+                    ></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-size:14px;color:#374151;">
+                        Expiring
+                    </span>
+
+                    <strong>
+                        {{ $expiringContracts }}
+                    </strong>
+                </div>
+
+                <div style="height:10px;background:#f3f4f6;border-radius:999px;overflow:hidden;">
+                    <div
+                        style="
+                            height:100%;
+                            width:{{ $totalContracts ? ($expiringContracts / $totalContracts) * 100 : 0 }}%;
+                            background:#f59e0b;
+                            border-radius:999px;
+                        "
+                    ></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-size:14px;color:#374151;">
+                        Expired
+                    </span>
+
+                    <strong>
+                        {{ $expiredContracts }}
+                    </strong>
+                </div>
+
+                <div style="height:10px;background:#f3f4f6;border-radius:999px;overflow:hidden;">
+                    <div
+                        style="
+                            height:100%;
+                            width:{{ $totalContracts ? ($expiredContracts / $totalContracts) * 100 : 0 }}%;
+                            background:#ef4444;
+                            border-radius:999px;
+                        "
+                    ></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div
+    style="
+        display:grid;
+        grid-template-columns:1fr;
+        gap:24px;
+        margin-top:24px;
+    "
+>
+    <div class="card">
+
+        <h3 style="margin-bottom:20px;">
             Upcoming Renewals
         </h3>
 
@@ -150,30 +233,47 @@
 
             <div
                 style="
-                    padding-bottom:16px;
-                    margin-bottom:16px;
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:14px 0;
                     border-bottom:1px solid #f1f5f9;
                 "
             >
+                <div>
+                    <a
+                        href="{{ route('contracts.show', $contract) }}"
+                        style="
+                            font-weight:600;
+                            color:#111827;
+                        "
+                    >
+                        {{ $contract->title }}
+                    </a>
 
-                <div
+                    <div
+                        style="
+                            font-size:13px;
+                            color:#6b7280;
+                            margin-top:4px;
+                        "
+                    >
+                        {{ $contract->counterparty }}
+                    </div>
+                </div>
+
+                <span
                     style="
+                        background:#eef2ff;
+                        color:#3730a3;
+                        padding:7px 11px;
+                        border-radius:999px;
+                        font-size:12px;
                         font-weight:600;
-                        margin-bottom:4px;
                     "
                 >
-                    {{ $contract->title }}
-                </div>
-
-                <div
-                    style="
-                        font-size:13px;
-                        color:#6b7280;
-                    "
-                >
-                    {{ optional($contract->renewal_date)->format('M d, Y') }}
-                </div>
-
+                    {{ $contract->renewal_countdown }}
+                </span>
             </div>
 
         @empty
@@ -185,7 +285,6 @@
         @endforelse
 
     </div>
-
 </div>
 
 @endsection

@@ -13,15 +13,15 @@ class DashboardController extends Controller
         $totalContracts = $contracts->count();
 
         $activeContracts = $contracts
-            ->filter(fn ($c) => $c->calculated_status === 'active')
+            ->filter(fn ($contract) => $contract->calculated_status === 'active')
             ->count();
 
         $expiringContracts = $contracts
-            ->filter(fn ($c) => $c->calculated_status === 'expiring')
+            ->filter(fn ($contract) => $contract->calculated_status === 'expiring')
             ->count();
 
         $expiredContracts = $contracts
-            ->filter(fn ($c) => $c->calculated_status === 'expired')
+            ->filter(fn ($contract) => $contract->calculated_status === 'expired')
             ->count();
 
         $recentContracts = Contract::latest()
