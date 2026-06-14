@@ -2,25 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Contract;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreContractRequest;
 
 class ContractController extends Controller
 {
     public function index()
     {
-        $contracts = Contract::latest()->paginate(10);
+        $contracts = Contract::with('category')
+            ->latest()
+            ->paginate(10);
 
         return view('contracts.index', compact('contracts'));
     }
 
     public function create()
     {
-        return view('contracts.create');
+        $categories = Category::orderBy('name')->get();
+
+        return view('contracts.create', compact('categories'));
     }
 
-    public function store()
+    public function store(StoreContractRequest $request)
     {
-        //
+        $documentPath = null;
+
+        if ($request->hasFile('document')) {
+            $documentPath = $request
+                ->file('document')
+                ->store('contracts', 'public');
+        }
+
+        Contract::create([
+            'user_id' => auth()->id(),
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'counterparty' => $request->counterparty,
+            'value' => $request->value,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'renewal_date' => $request->renewal_date,
+            'description' => $request->description,
+            'document_path' => $documentPath,
+            'status' => 'active',
+        ]);
+
+        return redirect()
+            ->route('contracts.index')
+            ->with('success', 'Contract created successfully.');
     }
 
     public function show(Contract $contract)
