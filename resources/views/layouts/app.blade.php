@@ -90,6 +90,15 @@
             background:#f3f4f6;
         }
 
+        .nav a.active{
+            background:#111827;
+            color:#ffffff;
+        }
+
+        .nav a.active .material-symbols-rounded{
+            color:#ffffff;
+        }
+
         .card{
             background:#fff;
             border:1px solid #e5e7eb;
@@ -174,27 +183,42 @@
 
         <nav class="nav">
 
-            <a href="{{ route('dashboard') }}">
+            <a
+                href="{{ route('dashboard') }}"
+                class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"
+            >
                 <span class="material-symbols-rounded">dashboard</span>
                 Dashboard
             </a>
 
-            <a href="{{ route('contracts.index') }}">
+            <a
+                href="{{ route('contracts.index') }}"
+                class="{{ request()->routeIs('contracts.index') || request()->routeIs('contracts.show') || request()->routeIs('contracts.edit') ? 'active' : '' }}"
+            >
                 <span class="material-symbols-rounded">description</span>
                 Contracts
             </a>
 
-            <a href="{{ route('contracts.create') }}">
+            <a
+                href="{{ route('contracts.create') }}"
+                class="{{ request()->routeIs('contracts.create') ? 'active' : '' }}"
+            >
                 <span class="material-symbols-rounded">add_circle</span>
                 New Contract
             </a>
 
-            <a href="{{ route('categories.index') }}">
+            <a
+                href="{{ route('categories.index') }}"
+                class="{{ request()->routeIs('categories.*') ? 'active' : '' }}"
+            >
                 <span class="material-symbols-rounded">folder</span>
                 Categories
             </a>
 
-            <a href="{{ route('profile.edit') }}">
+            <a
+                href="{{ route('profile.edit') }}"
+                class="{{ request()->routeIs('profile.*') ? 'active' : '' }}"
+            >
                 <span class="material-symbols-rounded">settings</span>
                 Settings
             </a>
