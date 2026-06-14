@@ -61,66 +61,16 @@ class ContractController extends Controller
 
     public function edit(Contract $contract)
     {
-        $categories = Category::orderBy('name')->get();
-
-        return view('contracts.edit', compact(
-            'contract',
-            'categories'
-        ));
+        return view('contracts.edit', compact('contract'));
     }
 
     public function update(StoreContractRequest $request, Contract $contract)
     {
-        $documentPath = $contract->document_path;
-
-        if ($request->hasFile('document')) {
-
-            if (
-                $contract->document_path &&
-                Storage::disk('public')->exists($contract->document_path)
-            ) {
-                Storage::disk('public')->delete(
-                    $contract->document_path
-                );
-            }
-
-            $documentPath = $request
-                ->file('document')
-                ->store('contracts', 'public');
-        }
-
-        $contract->update([
-            'category_id' => $request->category_id,
-            'title' => $request->title,
-            'counterparty' => $request->counterparty,
-            'value' => $request->value,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'renewal_date' => $request->renewal_date,
-            'description' => $request->description,
-            'document_path' => $documentPath,
-        ]);
-
-        return redirect()
-            ->route('contracts.index')
-            ->with('success', 'Contract updated successfully.');
+        //
     }
 
     public function destroy(Contract $contract)
     {
-        if (
-            $contract->document_path &&
-            Storage::disk('public')->exists($contract->document_path)
-        ) {
-            Storage::disk('public')->delete(
-                $contract->document_path
-            );
-        }
-
-        $contract->delete();
-
-        return redirect()
-            ->route('contracts.index')
-            ->with('success', 'Contract deleted successfully.');
+        //
     }
 }

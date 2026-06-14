@@ -69,9 +69,15 @@
 
                 <td style="padding:18px;">
 
-                    <div style="font-weight:600;">
+                    <a
+                        href="{{ route('contracts.show', $contract) }}"
+                        style="
+                            font-weight:600;
+                            color:#111827;
+                        "
+                    >
                         {{ $contract->title }}
-                    </div>
+                    </a>
 
                     <div style="font-size:13px;color:#6b7280;">
                         Created {{ $contract->created_at->diffForHumans() }}
