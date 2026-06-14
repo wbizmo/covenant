@@ -28,6 +28,19 @@
                 Draft
             </span>
         @endif
+
+        <span style="
+            display:inline-flex;
+            margin-left:8px;
+            background:#eef2ff;
+            color:#3730a3;
+            padding:8px 12px;
+            border-radius:999px;
+            font-size:12px;
+            font-weight:600;
+        ">
+            {{ $contract->renewal_countdown }}
+        </span>
     </div>
 
     <div style="display:flex;gap:12px;">
@@ -102,6 +115,13 @@
         <p>
             <strong>Renewal Date:</strong>
             {{ $contract->renewal_date?->format('M d, Y') ?? '-' }}
+        </p>
+
+        <br>
+
+        <p>
+            <strong>Renewal Status:</strong>
+            {{ $contract->renewal_countdown }}
         </p>
     </div>
 

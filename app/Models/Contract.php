@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -48,15 +47,36 @@ class Contract extends Model
             return 'expired';
         }
 
-        if (
-            now()->diffInDays(
-                $this->end_date,
-                false
-            ) <= 30
-        ) {
+        if (now()->diffInDays($this->end_date, false) <= 30) {
             return 'expiring';
         }
 
         return 'active';
+    }
+
+    public function getRenewalCountdownAttribute(): string
+    {
+        if (!$this->renewal_date) {
+            return 'No renewal date';
+        }
+
+        $days = now()->startOfDay()->diffInDays(
+            $this->renewal_date->startOfDay(),
+            false
+        );
+
+        if ($days < 0) {
+            return 'Renewal passed '.abs($days).' days ago';
+        }
+
+        if ($days === 0) {
+            return 'Renews today';
+        }
+
+        if ($days === 1) {
+            return 'Renews tomorrow';
+        }
+
+        return 'Renews in '.$days.' days';
     }
 }
