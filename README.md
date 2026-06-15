@@ -1,58 +1,70 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Covenant
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Covenant is a Laravel and Blade contract lifecycle management platform for storing agreements, tracking renewal dates, monitoring contract expiry, managing contract categories and organizing contractual documents from a clean dashboard.
 
-## About Laravel
+The project is designed as a focused business software MVP. It demonstrates Laravel authentication, Blade UI, CRUD workflows, file uploads, validation, Eloquent relationships, dashboard metrics, lifecycle logic, responsive layouts and shared-hosting-friendly deployment.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Authentication
 
-## Learning Laravel
+- User registration
+- User login
+- Password reset
+- Password confirmation
+- Email verification views
+- Profile update
+- Password update
+- Account deletion
+- Custom Covenant-styled auth screens
+- Custom Covenant-styled settings page
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Contract Management
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Create contracts
+- View contracts
+- Edit contracts
+- Delete contracts
+- Upload contract documents
+- Replace uploaded contract documents
+- Delete stored files when contracts are deleted
+- View contract details
+- Download attached contract documents
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Contract Tracking
 
-## Agentic Development
+- Contract title
+- Counterparty
+- Category
+- Contract value
+- Start date
+- End date
+- Renewal date
+- Description
+- Attached document
+- Automatic lifecycle status
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Lifecycle Status
 
-```bash
-composer require laravel/boost --dev
+Covenant automatically calculates contract status from the contract end date:
 
-php artisan boost:install
-```
+- `Active` — contract is valid and not close to expiry
+- `Expiring` — contract ends within 30 days
+- `Expired` — contract end date has passed
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Renewal Tracking
 
-## Contributing
+- Renewal countdown badges
+- Renewal status on contract detail pages
+- Upcoming renewals dashboard section
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Examples:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```txt
+Renews today
+Renews tomorrow
+Renews in 14 days
+Renewal passed 8 days ago
+No renewal date
