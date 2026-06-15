@@ -6,9 +6,7 @@
     <title>Covenant</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
-
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
@@ -42,11 +40,13 @@
             top:0;
             bottom:0;
             left:0;
+            z-index:1000;
         }
 
         .main{
             flex:1;
             margin-left:260px;
+            min-width:0;
         }
 
         .topbar{
@@ -57,10 +57,24 @@
             align-items:center;
             justify-content:space-between;
             padding:0 24px;
+            gap:16px;
+        }
+
+        .mobile-menu-btn{
+            display:none;
+            border:none;
+            background:#f3f4f6;
+            border-radius:12px;
+            width:42px;
+            height:42px;
+            cursor:pointer;
+            align-items:center;
+            justify-content:center;
         }
 
         .content{
             padding:32px;
+            overflow-x:auto;
         }
 
         .logo{
@@ -189,13 +203,79 @@
             color:white;
             cursor:pointer;
         }
+
+        .mobile-overlay{
+            display:none;
+        }
+
+        @media(max-width:900px){
+            .sidebar{
+                transform:translateX(-100%);
+                transition:.2s ease;
+            }
+
+            .sidebar.open{
+                transform:translateX(0);
+            }
+
+            .main{
+                margin-left:0;
+            }
+
+            .mobile-menu-btn{
+                display:flex;
+            }
+
+            .topbar{
+                padding:0 16px;
+            }
+
+            .content{
+                padding:20px;
+            }
+
+            .page-title{
+                font-size:24px;
+            }
+
+            .mobile-overlay{
+                display:block;
+                position:fixed;
+                inset:0;
+                background:rgba(17,24,39,.35);
+                z-index:900;
+            }
+
+            table{
+                min-width:820px;
+            }
+
+            .toast{
+                left:16px;
+                right:16px;
+                width:auto;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="layout">
+<div
+    class="layout"
+    x-data="{ sidebarOpen:false }"
+>
 
-    <aside class="sidebar">
+    <div
+        x-show="sidebarOpen"
+        x-transition
+        class="mobile-overlay"
+        @click="sidebarOpen = false"
+    ></div>
+
+    <aside
+        class="sidebar"
+        :class="{ 'open': sidebarOpen }"
+    >
 
         <div class="logo">
             Covenant
@@ -275,8 +355,20 @@
 
         <div class="topbar">
 
-            <div>
-                Contract Lifecycle Management
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button
+                    type="button"
+                    class="mobile-menu-btn"
+                    @click="sidebarOpen = true"
+                >
+                    <span class="material-symbols-rounded">
+                        menu
+                    </span>
+                </button>
+
+                <div>
+                    Contract Lifecycle Management
+                </div>
             </div>
 
             <div>
