@@ -190,6 +190,10 @@
                     Status
                 </th>
 
+                <th style="padding:18px;text-align:right;">
+                    Actions
+                </th>
+
             </tr>
 
         </thead>
@@ -202,18 +206,18 @@
 
                 <td style="padding:18px;">
 
-                    <a
-                        href="{{ route('contracts.show', $contract) }}"
+                    <div
                         style="
-                            font-weight:600;
+                            font-weight:700;
                             color:#111827;
+                            margin-bottom:6px;
                         "
                     >
                         {{ $contract->title }}
-                    </a>
+                    </div>
 
                     <div style="font-size:13px;color:#6b7280;">
-                        {{ $contract->counterparty }}
+                        {{ $contract->created_at->diffForHumans() }}
                     </div>
 
                 </td>
@@ -289,6 +293,32 @@
                         </span>
 
                     @endif
+
+                </td>
+
+                <td style="padding:18px;text-align:right;">
+
+                    <a
+                        href="{{ route('contracts.show', $contract) }}"
+                        class="btn"
+                        style="
+                            display:inline-flex;
+                            align-items:center;
+                            gap:6px;
+                            background:#f3f4f6;
+                            color:#111827;
+                            padding:10px 14px;
+                        "
+                    >
+                        <span
+                            class="material-symbols-rounded"
+                            style="font-size:18px;"
+                        >
+                            visibility
+                        </span>
+
+                        View
+                    </a>
 
                 </td>
 
