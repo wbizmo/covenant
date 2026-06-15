@@ -18,7 +18,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('contracts', ContractController::class);
 
     Route::resource('categories', CategoryController::class)
-        ->only(['index']);
+        ->only([
+            'index',
+            'create',
+            'store',
+            'destroy',
+        ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
