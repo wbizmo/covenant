@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = Category::withCount('contracts')
+            ->latest()
+            ->paginate(10);
 
         return view('categories.index', compact('categories'));
     }
@@ -25,7 +28,10 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
         ]);
 
-        Category::create($validated);
+        Category::create([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+        ]);
 
         return redirect()
             ->route('categories.index')
