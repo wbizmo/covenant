@@ -54,7 +54,7 @@
 
             <x-primary-button
                 style="width:100%;"
-                :disabled="loading"
+                x-bind:disabled="loading"
             >
 
                 <span x-show="!loading">

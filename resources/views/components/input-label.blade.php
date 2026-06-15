@@ -2,11 +2,11 @@
 
 <label
     {{ $attributes->merge([
-        'class' => '
-            block
-            text-sm
-            font-medium
-            text-gray-700
+        'style' => '
+            display:block;
+            font-size:13px;
+            font-weight:600;
+            color:#374151;
         '
     ]) }}
 >

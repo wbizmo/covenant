@@ -2,21 +2,20 @@
     {{
         $attributes->merge([
             'type' => 'submit',
-            'class' => '
-                inline-flex
-                items-center
-                justify-center
-                px-5
-                py-3
-                bg-gray-900
-                border-0
-                rounded-xl
-                text-white
-                font-medium
-                text-sm
-                cursor-pointer
-                hover:bg-black
-                transition
+            'style' => '
+                display:inline-flex;
+                align-items:center;
+                justify-content:center;
+                gap:8px;
+                padding:13px 18px;
+                border:0;
+                border-radius:12px;
+                background:#111827;
+                color:#ffffff;
+                font-size:14px;
+                font-weight:600;
+                cursor:pointer;
+                width:auto;
             '
         ])
     }}

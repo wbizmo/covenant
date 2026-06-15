@@ -159,7 +159,7 @@
             <button
                 type="submit"
                 class="btn btn-primary"
-                :disabled="loading"
+                x-bind:disabled="loading"
             >
 
                 <span x-show="!loading">
