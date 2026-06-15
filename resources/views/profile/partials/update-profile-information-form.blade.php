@@ -1,64 +1,156 @@
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+
+    <header style="margin-bottom:24px;">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:6px;">
+            Profile Information
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+        <p style="color:#6b7280;line-height:1.6;">
+            Update your account name and email address.
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+    <form
+        id="send-verification"
+        method="POST"
+        action="{{ route('verification.send') }}"
+    >
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form
+        method="POST"
+        action="{{ route('profile.update') }}"
+        x-data="{ loading:false }"
+        @submit="loading=true"
+    >
         @csrf
         @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+
+            <div>
+                <x-input-label
+                    for="name"
+                    value="Full Name"
+                />
+
+                <x-text-input
+                    id="name"
+                    name="name"
+                    type="text"
+                    :value="old('name', $user->name)"
+                    required
+                    autofocus
+                    autocomplete="name"
+                />
+
+                <x-input-error
+                    :messages="$errors->get('name')"
+                />
+            </div>
+
+            <div>
+                <x-input-label
+                    for="email"
+                    value="Email Address"
+                />
+
+                <x-text-input
+                    id="email"
+                    name="email"
+                    type="email"
+                    :value="old('email', $user->email)"
+                    required
+                    autocomplete="username"
+                />
+
+                <x-input-error
+                    :messages="$errors->get('email')"
+                />
+            </div>
+
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
+            <div
+                style="
+                    margin-top:20px;
+                    padding:16px;
+                    border-radius:14px;
+                    background:#fef3c7;
+                    color:#92400e;
+                    line-height:1.6;
+                "
+            >
+                Your email address is unverified.
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
+                <button
+                    form="send-verification"
+                    style="
+                        border:none;
+                        background:none;
+                        color:#92400e;
+                        font-weight:700;
+                        cursor:pointer;
+                        text-decoration:underline;
+                    "
+                >
+                    Resend verification email.
+                </button>
+            </div>
 
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
+            @if (session('status') === 'verification-link-sent')
+
+                <div
+                    style="
+                        margin-top:14px;
+                        padding:14px 16px;
+                        border-radius:14px;
+                        background:#dcfce7;
+                        color:#166534;
+                    "
+                >
+                    A new verification link has been sent to your email address.
                 </div>
-            @endif
-        </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            @endif
+
+        @endif
+
+        <div style="margin-top:24px;display:flex;align-items:center;gap:14px;">
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+                x-bind:disabled="loading"
+            >
+                <span x-show="!loading">
+                    Save Changes
+                </span>
+
+                <span x-show="loading">
+                    Saving...
+                </span>
+            </button>
 
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
+
+                <span
+                    x-data="{ show:true }"
                     x-show="show"
                     x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    x-init="setTimeout(() => show = false, 2500)"
+                    style="color:#166534;font-size:14px;font-weight:600;"
+                >
+                    Saved.
+                </span>
+
             @endif
+
         </div>
+
     </form>
+
 </section>

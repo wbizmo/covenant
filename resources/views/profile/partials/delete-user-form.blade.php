@@ -1,55 +1,127 @@
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
+                    <section x-data="{ deleteModal:false }">
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </p>
-    </header>
+                        <header style="margin-bottom:24px;">
+                            <h2 style="font-size:20px;font-weight:700;margin-bottom:6px;color:#991b1b;">
+                                Delete Account
+                            </h2>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+                            <p style="color:#6b7280;line-height:1.6;">
+                                Permanently delete your account and remove all related data. This action cannot be undone.
+                            </p>
+                        </header>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
-            @csrf
-            @method('delete')
+                        <button
+                            type="button"
+                            class="btn"
+                            style="
+                                background:#dc2626;
+                                color:#ffffff;
+                            "
+                            @click="deleteModal = true"
+                        >
+                            Delete Account
+                        </button>
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
+                        <div
+                            x-show="deleteModal"
+                            x-transition
+                            style="
+                                position:fixed;
+                                inset:0;
+                                background:rgba(17,24,39,.45);
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                z-index:9999;
+                            "
+                        >
+                            <div
+                                style="
+                                    width:100%;
+                                    max-width:460px;
+                                    background:#ffffff;
+                                    border-radius:20px;
+                                    padding:28px;
+                                    box-shadow:0 25px 60px rgba(0,0,0,.25);
+                                "
+                                @click.outside="deleteModal = false"
+                            >
+                                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                                    <span
+                                        class="material-symbols-rounded"
+                                        style="color:#dc2626;font-size:32px;"
+                                    >
+                                        warning
+                                    </span>
 
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-            </p>
+                                    <h2 style="font-size:20px;">
+                                        Confirm Account Deletion
+                                    </h2>
+                                </div>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                                <p style="color:#6b7280;line-height:1.7;margin-bottom:24px;">
+                                    Once your account is deleted, all resources and data will be permanently removed.
+                                    Enter your password to confirm this action.
+                                </p>
 
-                <x-text-input
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
+                                <form
+                                    method="POST"
+                                    action="{{ route('profile.destroy') }}"
+                                    x-data="{ loading:false }"
+                                    @submit="loading=true"
+                                >
+                                    @csrf
+                                    @method('delete')
 
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-            </div>
+                                    <div>
+                                        <x-input-label
+                                            for="password"
+                                            value="Password"
+                                        />
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
+                                        <x-text-input
+                                            id="password"
+                                            name="password"
+                                            type="password"
+                                            placeholder="Enter your password"
+                                        />
 
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
-            </div>
-        </form>
-    </x-modal>
-</section>
+                                        <x-input-error
+                                            :messages="$errors->userDeletion->get('password')"
+                                        />
+                                    </div>
+
+                                    <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px;">
+
+                                        <button
+                                            type="button"
+                                            class="btn"
+                                            style="background:#f3f4f6;"
+                                            @click="deleteModal = false"
+                                        >
+                                            Cancel
+                                        </button>
+
+                                        <button
+                                            type="submit"
+                                            class="btn"
+                                            style="background:#dc2626;color:white;"
+                                            x-bind:disabled="loading"
+                                        >
+                                            <span x-show="!loading">
+                                                Delete Account
+                                            </span>
+
+                                            <span x-show="loading">
+                                                Deleting...
+                                            </span>
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </section>
