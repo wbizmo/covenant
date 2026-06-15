@@ -2,6 +2,14 @@
 
 @section('content')
 
+<div
+    x-data="{
+        deleteModal: false,
+        deleteAction: '',
+        categoryName: ''
+    }"
+>
+
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
 
     <div>
@@ -61,27 +69,21 @@
 
                 <td style="padding:18px;text-align:right;">
 
-                    <form
-                        method="POST"
-                        action="{{ route('categories.destroy', $category) }}"
-                        onsubmit="return confirm('Delete this category?')"
-                        style="display:inline;"
+                    <button
+                        type="button"
+                        class="btn"
+                        style="
+                            background:#fee2e2;
+                            color:#991b1b;
+                        "
+                        @click="
+                            deleteModal = true;
+                            deleteAction = '{{ route('categories.destroy', $category) }}';
+                            categoryName = '{{ addslashes($category->name) }}';
+                        "
                     >
-                        @csrf
-                        @method('DELETE')
-
-                        <button
-                            type="submit"
-                            class="btn"
-                            style="
-                                background:#fee2e2;
-                                color:#991b1b;
-                            "
-                        >
-                            Delete
-                        </button>
-
-                    </form>
+                        Delete
+                    </button>
 
                 </td>
 
@@ -139,5 +141,81 @@
 </div>
 
 @endif
+
+<div
+    x-show="deleteModal"
+    x-transition
+    style="
+        position:fixed;
+        inset:0;
+        background:rgba(17,24,39,.45);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:9999;
+    "
+>
+    <div
+        style="
+            width:100%;
+            max-width:420px;
+            background:#fff;
+            border-radius:20px;
+            padding:28px;
+            box-shadow:0 25px 60px rgba(0,0,0,.25);
+        "
+        @click.outside="deleteModal = false"
+    >
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <span
+                class="material-symbols-rounded"
+                style="color:#dc2626;font-size:32px;"
+            >
+                warning
+            </span>
+
+            <h2 style="font-size:20px;">
+                Delete Category
+            </h2>
+        </div>
+
+        <p style="color:#6b7280;line-height:1.7;margin-bottom:24px;">
+            You are about to delete
+            <strong x-text="categoryName"></strong>.
+            This action cannot be undone.
+        </p>
+
+        <div style="display:flex;justify-content:flex-end;gap:12px;">
+
+            <button
+                type="button"
+                class="btn"
+                style="background:#f3f4f6;"
+                @click="deleteModal = false"
+            >
+                Cancel
+            </button>
+
+            <form
+                method="POST"
+                :action="deleteAction"
+            >
+                @csrf
+                @method('DELETE')
+
+                <button
+                    type="submit"
+                    class="btn"
+                    style="background:#dc2626;color:white;"
+                >
+                    Delete Category
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</div>
 
 @endsection
