@@ -8,21 +8,21 @@ class StoreContractRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user() !== null;
     }
 
     public function rules(): array
     {
         return [
-            'title' => ['required','string','max:255'],
-            'counterparty' => ['required','string','max:255'],
-            'category_id' => ['nullable','exists:categories,id'],
-            'value' => ['nullable','numeric'],
-            'start_date' => ['nullable','date'],
-            'end_date' => ['nullable','date'],
-            'renewal_date' => ['nullable','date'],
-            'description' => ['nullable','string'],
-            'document' => ['nullable','file','max:10240'],
+            'title' => ['required', 'string', 'max:255'],
+            'counterparty' => ['required', 'string', 'max:255'],
+            'category_id' => ['nullable', 'exists:categories,id'],
+            'value' => ['nullable', 'numeric'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date'],
+            'renewal_date' => ['nullable', 'date'],
+            'description' => ['nullable', 'string', 'max:20000'],
+            'document' => ['nullable', 'file', 'max:10240', 'mimes:pdf,doc,docx'],
         ];
     }
 }
