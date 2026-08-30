@@ -69,94 +69,44 @@
 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;">
 
     <div class="card">
-        <h3 style="margin-bottom:20px;">
-            Contract Details
-        </h3>
-
-        <p>
-            <strong>Counterparty:</strong>
-            {{ $contract->counterparty }}
-        </p>
-
+        <h3 style="margin-bottom:20px;">Contract Details</h3>
+        <p><strong>Counterparty:</strong> {{ $contract->counterparty }}</p>
         <br>
-
-        <p>
-            <strong>Category:</strong>
-            {{ $contract->category?->name ?? '-' }}
-        </p>
-
+        <p><strong>Category:</strong> {{ $contract->category?->name ?? '-' }}</p>
         <br>
-
-        <p>
-            <strong>Value:</strong>
-            {{ $contract->value ? '$'.number_format($contract->value,2) : '-' }}
-        </p>
+        <p><strong>Value:</strong> {{ $contract->value ? '$'.number_format($contract->value,2) : '-' }}</p>
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom:20px;">
-            Important Dates
-        </h3>
-
-        <p>
-            <strong>Start Date:</strong>
-            {{ $contract->start_date?->format('M d, Y') ?? '-' }}
-        </p>
-
+        <h3 style="margin-bottom:20px;">Important Dates</h3>
+        <p><strong>Start Date:</strong> {{ $contract->start_date?->format('M d, Y') ?? '-' }}</p>
         <br>
-
-        <p>
-            <strong>End Date:</strong>
-            {{ $contract->end_date?->format('M d, Y') ?? '-' }}
-        </p>
-
+        <p><strong>End Date:</strong> {{ $contract->end_date?->format('M d, Y') ?? '-' }}</p>
         <br>
-
-        <p>
-            <strong>Renewal Date:</strong>
-            {{ $contract->renewal_date?->format('M d, Y') ?? '-' }}
-        </p>
-
+        <p><strong>Renewal Date:</strong> {{ $contract->renewal_date?->format('M d, Y') ?? '-' }}</p>
         <br>
-
-        <p>
-            <strong>Renewal Status:</strong>
-            {{ $contract->renewal_countdown }}
-        </p>
+        <p><strong>Renewal Status:</strong> {{ $contract->renewal_countdown }}</p>
     </div>
 
 </div>
 
 @if($contract->description)
-
 <div class="card" style="margin-top:24px;">
-    <h3 style="margin-bottom:16px;">
-        Description
-    </h3>
-
-    <p style="line-height:1.8;">
-        {{ $contract->description }}
-    </p>
+    <h3 style="margin-bottom:16px;">Description</h3>
+    <p style="line-height:1.8;">{{ $contract->description }}</p>
 </div>
-
 @endif
 
 @if($contract->document_path)
-
 <div class="card" style="margin-top:24px;">
-    <h3 style="margin-bottom:16px;">
-        Attached Document
-    </h3>
-
+    <h3 style="margin-bottom:16px;">Attached Document</h3>
     <a
-        href="{{ asset('storage/'.$contract->document_path) }}"
-        target="_blank"
+        href="{{ route('contracts.document', $contract) }}"
         class="btn btn-primary"
     >
         Download Contract
     </a>
 </div>
-
 @endif
 
 <div
@@ -184,16 +134,8 @@
         @click.outside="deleteModal = false"
     >
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-            <span
-                class="material-symbols-rounded"
-                style="color:#dc2626;font-size:32px;"
-            >
-                warning
-            </span>
-
-            <h2 style="font-size:20px;">
-                Delete Contract
-            </h2>
+            <span class="material-symbols-rounded" style="color:#dc2626;font-size:32px;">warning</span>
+            <h2 style="font-size:20px;">Delete Contract</h2>
         </div>
 
         <p style="color:#6b7280;line-height:1.7;margin-bottom:24px;">
@@ -202,29 +144,12 @@
         </p>
 
         <div style="display:flex;justify-content:flex-end;gap:12px;">
-            <button
-                type="button"
-                class="btn"
-                style="background:#f3f4f6;"
-                @click="deleteModal = false"
-            >
-                Cancel
-            </button>
+            <button type="button" class="btn" style="background:#f3f4f6;" @click="deleteModal = false">Cancel</button>
 
-            <form
-                method="POST"
-                action="{{ route('contracts.destroy', $contract) }}"
-            >
+            <form method="POST" action="{{ route('contracts.destroy', $contract) }}">
                 @csrf
                 @method('DELETE')
-
-                <button
-                    type="submit"
-                    class="btn"
-                    style="background:#dc2626;color:white;"
-                >
-                    Delete Contract
-                </button>
+                <button type="submit" class="btn" style="background:#dc2626;color:white;">Delete Contract</button>
             </form>
         </div>
     </div>
