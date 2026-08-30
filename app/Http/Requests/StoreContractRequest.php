@@ -8,7 +8,7 @@ class StoreContractRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     public function rules(): array
@@ -22,7 +22,7 @@ class StoreContractRequest extends FormRequest
             'end_date' => ['nullable','date'],
             'renewal_date' => ['nullable','date'],
             'description' => ['nullable','string'],
-            'document' => ['nullable','file','max:10240'],
+            'document' => ['nullable','file','mimes:pdf,doc,docx,txt','max:10240'],
         ];
     }
 }

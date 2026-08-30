@@ -15,6 +15,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::get('/contracts/{contract}/document', [ContractController::class, 'downloadDocument'])
+        ->name('contracts.document');
+
     Route::resource('contracts', ContractController::class);
 
     Route::resource('categories', CategoryController::class)

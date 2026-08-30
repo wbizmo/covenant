@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContractRequest;
 use App\Models\Category;
 use App\Models\Contract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\StoreContractRequest;
 
 class ContractController extends Controller
 {
@@ -15,6 +15,7 @@ class ContractController extends Controller
         $categories = Category::orderBy('name')->get();
 
         $contracts = Contract::with('category')
+            ->where('user_id', auth()->id())
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->search;
 
@@ -52,10 +53,7 @@ class ContractController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('contracts.index', compact(
-            'contracts',
-            'categories'
-        ));
+        return view('contracts.index', compact('contracts', 'categories'));
     }
 
     public function create()
@@ -70,9 +68,7 @@ class ContractController extends Controller
         $documentPath = null;
 
         if ($request->hasFile('document')) {
-            $documentPath = $request
-                ->file('document')
-                ->store('contracts', 'public');
+            $documentPath = $request->file('document')->store('contracts', 'local');
         }
 
         Contract::create([
@@ -96,34 +92,30 @@ class ContractController extends Controller
 
     public function show(Contract $contract)
     {
+        $this->assertOwner($contract);
+
         return view('contracts.show', compact('contract'));
     }
 
     public function edit(Contract $contract)
     {
+        $this->assertOwner($contract);
         $categories = Category::orderBy('name')->get();
 
-        return view('contracts.edit', compact(
-            'contract',
-            'categories'
-        ));
+        return view('contracts.edit', compact('contract', 'categories'));
     }
 
     public function update(StoreContractRequest $request, Contract $contract)
     {
+        $this->assertOwner($contract);
         $documentPath = $contract->document_path;
 
         if ($request->hasFile('document')) {
-            if (
-                $contract->document_path &&
-                Storage::disk('public')->exists($contract->document_path)
-            ) {
-                Storage::disk('public')->delete($contract->document_path);
+            if ($contract->document_path && Storage::disk('local')->exists($contract->document_path)) {
+                Storage::disk('local')->delete($contract->document_path);
             }
 
-            $documentPath = $request
-                ->file('document')
-                ->store('contracts', 'public');
+            $documentPath = $request->file('document')->store('contracts', 'local');
         }
 
         $contract->update([
@@ -145,11 +137,10 @@ class ContractController extends Controller
 
     public function destroy(Contract $contract)
     {
-        if (
-            $contract->document_path &&
-            Storage::disk('public')->exists($contract->document_path)
-        ) {
-            Storage::disk('public')->delete($contract->document_path);
+        $this->assertOwner($contract);
+
+        if ($contract->document_path && Storage::disk('local')->exists($contract->document_path)) {
+            Storage::disk('local')->delete($contract->document_path);
         }
 
         $contract->delete();
@@ -157,5 +148,24 @@ class ContractController extends Controller
         return redirect()
             ->route('contracts.index')
             ->with('success', 'Contract deleted successfully.');
+    }
+
+    public function downloadDocument(Contract $contract)
+    {
+        $this->assertOwner($contract);
+        abort_unless(
+            $contract->document_path && Storage::disk('local')->exists($contract->document_path),
+            404
+        );
+
+        return Storage::disk('local')->download(
+            $contract->document_path,
+            basename($contract->document_path)
+        );
+    }
+
+    private function assertOwner(Contract $contract): void
+    {
+        abort_unless((string) $contract->user_id === (string) auth()->id(), 404);
     }
 }
